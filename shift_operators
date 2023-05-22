@@ -1,0 +1,9 @@
+#include <stdio.h>
+
+int main() {
+    int a =12;
+    printf("Left shift a<<1 is%d\n ",a<<1); // for every left shift the actual number will get doubled if a<<2 , a will be 48
+    
+    printf("Right shift a>>1 is%d\n ",a>>2);// for every right shift the actual number get half
+
+}
