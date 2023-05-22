@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <limits.h>
+#define N 4 // Number of cities
+
+int tsp(int graph[N][N], int visited, int current_position) {
+    
+    // All cities visited
+    if (visited == (1 << N) - 1) return graph[current_position][0]; // Return to the starting city
+
+    int minCost = INT_MAX;
+
+    for (int city = 0; city < N; city++) {
+        // Check if city is not visited
+        if ((visited & (1 << city)) == 0) { 
+            int newCost = graph[current_position][city] + tsp(graph, visited | (1 << city), city);
+            if (newCost < minCost) minCost = newCost;
+        }
+    }
+
+    return minCost;
+}
+
+int main() {
+    int graph[N][N] = {
+        {0, 10, 15, 20},
+        {10, 0, 35, 25},
+        {15, 35, 0, 30},
+        {20, 25, 30, 0}
+    };
+
+    int visited = 1; // Starting city is 0
+    int current_position = 0; // Starting city is 0
+
+    int minCost = tsp(graph, visited, current_position);
+
+    printf("Minimum cost: %d\n", minCost);
+
+    return 0;
+}
+
