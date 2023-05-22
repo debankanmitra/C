@@ -1,0 +1,32 @@
+// Online C compiler to run C program online
+#include <stdio.h>
+
+void Mergesort(int []arr){
+    if (arr.length==1) return arr;
+    int mid = arr.length/2;
+    
+    int []left =  Mergesort(arrays.range(arr,0,mid));
+    int []right =  Mergesort(arrays.range(arr,mid,arr.length));
+    
+    return Merge(left , right);
+}
+
+void Merge(int A[],int B[],int C[]){
+    int i = j = k =0;
+    while (i<A.length && j<B.length){
+        if(A[i]<B[j]){ C[k]=A[i]; i++;k++; }
+        else{C[k]=B[j];j++;k++;}
+    }
+    while (i<A.length){C[k]=A[i];i++;k++;}
+    while (j<B.length){C[k]=B[j];j++;k++;}
+}
+
+
+
+int main() {
+    int arr[] ={7,8,9,14,23};
+    Mergesort(arr);
+    return 0;
+}
+
+
