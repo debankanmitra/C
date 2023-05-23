@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_NODES 6
+
+// Function to perform DFS traversal
+void depthFirstSearch(int graph[MAX_NODES][MAX_NODES], bool visited[], int currentNode) {
+    printf("%d ", currentNode);
+    visited[currentNode] = true;
+
+    // Visit all adjacent nodes of the current node
+    for (int i = 0; i < MAX_NODES; i++) {
+        if (graph[currentNode][i] && !visited[i]) {
+            depthFirstSearch(graph, visited, i);
+        }
+    }
+}
+
+// Wrapper function for DFS traversal
+void dfsTraversal(int graph[MAX_NODES][MAX_NODES], int startNode) {
+    bool visited[MAX_NODES] = { false };
+
+    printf("Depth First Search Traversal: ");
+    depthFirstSearch(graph, visited, startNode);
+    printf("\n");
+}
+
+int main() {
+    int graph[MAX_NODES][MAX_NODES] = {
+        {0, 1, 1, 0, 0, 0},
+        {1, 0, 0, 1, 1, 0},
+        {1, 0, 0, 0, 1, 1},
+        {0, 1, 0, 0, 0, 0},
+        {0, 1, 1, 0, 0, 1},
+        {0, 0, 1, 0, 1, 0}
+    };
+
+    int startNode = 0;
+
+    dfsTraversal(graph, startNode);
+
+    return 0;
+}
+

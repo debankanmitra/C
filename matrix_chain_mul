@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <limits.h>
+
+int matrixChainMultiplication(int dimensions[], int i, int j) {
+    if (i == j) {
+        return 0; // Base case: Only one matrix
+    }
+
+    int k;
+    int minCost = INT_MAX;
+
+    // Find the minimum cost by trying all possible split points
+    for (k = i; k < j; k++) {
+        int cost = matrixChainMultiplication(dimensions, i, k) +
+                   matrixChainMultiplication(dimensions, k + 1, j) +
+                   dimensions[i - 1] * dimensions[k] * dimensions[j];
+
+        if (cost < minCost) {
+            minCost = cost;
+        }
+    }
+
+    return minCost;
+}
+
+int main() {
+    int dimensions[] = {10, 30, 5, 60};
+    int n = sizeof(dimensions) / sizeof(dimensions[0]);
+
+    int minimumCost = matrixChainMultiplication(dimensions, 1, n - 1);
+
+    printf("Minimum cost of matrix chain multiplication: %d\n", minimumCost);
+
+    return 0;
+}
+

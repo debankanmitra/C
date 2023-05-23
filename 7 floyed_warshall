@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define MAX_NODES 100
+
+// Function to perform the Floyd-Warshall algorithm
+void floydWarshall(int graph[MAX_NODES][MAX_NODES], int numNodes) {
+    int distance[MAX_NODES][MAX_NODES];
+
+    // Initialize the distance matrix with the input graph
+    for (int i = 0; i < numNodes; i++) {
+        for (int j = 0; j < numNodes; j++) {
+            distance[i][j] = graph[i][j];
+        }
+    }
+
+    // Perform the Floyd-Warshall algorithm
+    for (int k = 0; k < numNodes; k++) {
+        for (int i = 0; i < numNodes; i++) {
+            for (int j = 0; j < numNodes; j++) {
+                // Check if going through vertex k provides a shorter path
+                if (distance[i][k] != INT_MAX && distance[k][j] != INT_MAX &&
+                    distance[i][k] + distance[k][j] < distance[i][j]) {
+                    distance[i][j] = distance[i][k] + distance[k][j];
+                }
+            }
+        }
+    }
+
+    // Print the resulting shortest distances
+    printf("Shortest distances between all pairs of vertices:\n");
+    for (int i = 0; i < numNodes; i++) {
+        for (int j = 0; j < numNodes; j++) {
+            if (distance[i][j] == INT_MAX) {
+                printf("INF\t");
+            } else {
+                printf("%d\t", distance[i][j]);
+            }
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int numNodes = 4;
+
+    // Example graph represented by an adjacency matrix
+    int graph[MAX_NODES][MAX_NODES] = {
+        {0, 5, INT_MAX, 10},
+        {INT_MAX, 0, 3, INT_MAX},
+        {INT_MAX, INT_MAX, 0, 1},
+        {INT_MAX, INT_MAX, INT_MAX, 0}
+    };
+
+    floydWarshall(graph, numNodes);
+
+    return 0;
+}
+

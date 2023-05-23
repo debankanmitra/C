@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <limits.h>
+
+#define MAX_NODES 100
+#define MAX_EDGES 100
+
+// Structure to represent an edge
+struct Edge {
+    int source, destination, weight;
+};
+
+// Array to store the distances from the source to each node
+int distances[MAX_NODES];
+
+// Array to store the parent node for each node in the shortest path
+int parents[MAX_NODES];
+
+// Function to initialize the arrays
+void initialize(int startNode, int numNodes) {
+    for (int i = 0; i < numNodes; i++) {
+        distances[i] = INT_MAX;
+        parents[i] = -1;
+    }
+    distances[startNode] = 0;
+}
+
+// Recursive function for the Bellman-Ford algorithm
+void bellmanFord(struct Edge edges[], int numNodes, int numEdges, int node) {
+    if (node == numNodes) {
+        // Base case: Reached the last node
+        return;
+    }
+
+    for (int i = 0; i < numEdges; i++) {
+        int source = edges[i].source;
+        int destination = edges[i].destination;
+        int weight = edges[i].weight;
+
+        if (distances[source] != INT_MAX && distances[source] + weight < distances[destination]) {
+            // Relax the edge
+            distances[destination] = distances[source] + weight;
+            parents[destination] = source;
+        }
+    }
+
+    bellmanFord(edges, numNodes, numEdges, node + 1);
+}
+
+// Function to print the shortest path from the source to a given node
+void printPath(int node) {
+    if (node == -1) {
+        return;
+    }
+    printPath(parents[node]);
+    printf("%d ", node);
+}
+
+int main() {
+    int numNodes = 5;
+    int numEdges = 8;
+
+    // Example graph
+    struct Edge edges[MAX_EDGES] = {
+        {0, 1, 6},
+        {0, 2, 7},
+        {1, 2, 8},
+        {1, 3, 5},
+        {1, 4, -4},
+        {2, 3, -3},
+        {2, 4, 9},
+        {3, 1, -2}
+    };
+
+    int startNode = 0;
+
+    initialize(startNode, numNodes);
+    bellmanFord(edges, numNodes, numEdges, 0);
+
+    // Print the shortest distances and paths
+    printf("Vertex\tDistance\tPath\n");
+    for (int i = 0; i < numNodes; i++) {
+        printf("%d\t%d\t\t%d ", i, distances[i], startNode);
+        printPath(i);
+        printf("\n");
+    }
+
+    return 0;
+}
+
