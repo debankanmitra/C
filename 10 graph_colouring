@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_NODES 100
+
+// Function to check if it is safe to color a node with a given color
+bool isSafe(int node, int color, int graph[MAX_NODES][MAX_NODES], int colors[MAX_NODES], int numNodes) {
+    for (int i = 0; i < numNodes; i++) {
+        if (graph[node][i] && colors[i] == color) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Recursive function for the graph coloring problem using backtracking
+bool graphColoringUtil(int graph[MAX_NODES][MAX_NODES], int numColors, int colors[MAX_NODES], int node, int numNodes) {
+    if (node == numNodes) {
+        // All nodes have been colored
+        return true;
+    }
+
+    for (int color = 1; color <= numColors; color++) {
+        if (isSafe(node, color, graph, colors, numNodes)) {
+            colors[node] = color;
+
+            if (graphColoringUtil(graph, numColors, colors, node + 1, numNodes)) {
+                // Color the next node
+                return true;
+            }
+
+            // Backtrack and try a different color
+            colors[node] = 0;
+        }
+    }
+
+    return false;
+}
+
+// Function to solve the graph coloring problem
+void graphColoring(int graph[MAX_NODES][MAX_NODES], int numColors, int numNodes) {
+    int colors[MAX_NODES] = { 0 }; // Array to store the colors assigned to nodes
+
+    if (graphColoringUtil(graph, numColors, colors, 0, numNodes)) {
+        printf("Graph can be colored using at most %d colors.\n", numColors);
+        printf("Color assignment for each node:\n");
+        for (int i = 0; i < numNodes; i++) {
+            printf("Node %d: Color %d\n", i, colors[i]);
+        }
+    } else {
+        printf("Graph cannot be colored using %d colors.\n", numColors);
+    }
+}
+
+int main() {
+    int numNodes = 5;
+    int numColors = 3;
+
+    // Example graph represented by an adjacency matrix
+    int graph[MAX_NODES][MAX_NODES] = {
+        {0, 1, 1, 1, 0},
+        {1, 0, 1, 0, 1},
+        {1, 1, 0, 1, 0},
+        {1, 0, 1, 0, 1},
+        {0, 1, 0, 1, 0}
+    };
+
+    graphColoring(graph, numColors, numNodes);
+
+    return 0;
+}
+
