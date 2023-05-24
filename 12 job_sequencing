@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_JOBS 100
+
+// Structure to represent a job
+typedef struct {
+    int id;         // Job ID
+    int deadline;   // Job deadline
+    int profit;     // Job profit
+} Job;
+
+// Function to compare two jobs based on their profit (descending order)
+int compare(Job a, Job b) {
+    return b.profit - a.profit;
+}
+
+// Function to find the maximum deadline among all jobs
+int findMaxDeadline(Job jobs[], int numJobs) {
+    int maxDeadline = 0;
+    for (int i = 0; i < numJobs; i++) {
+        if (jobs[i].deadline > maxDeadline) {
+            maxDeadline = jobs[i].deadline;
+        }
+    }
+    return maxDeadline;
+}
+
+// Function to perform the job sequencing with deadlines using the Greedy algorithm
+void jobSequencing(Job jobs[], int numJobs) {
+    // Sort the jobs based on their profit (in descending order)
+    qsort(jobs, numJobs, sizeof(Job), compare);
+
+    int maxDeadline = findMaxDeadline(jobs, numJobs);
+    int sequence[maxDeadline];  // Array to store the job sequence
+    bool slot[maxDeadline];     // Array to track the availability of slots
+
+    // Initialize all slots to be available
+    for (int i = 0; i < maxDeadline; i++) {
+        slot[i] = false;
+    }
+
+    // Iterate over all jobs and assign them to slots based on deadlines
+    for (int i = 0; i < numJobs; i++) {
+        for (int j = jobs[i].deadline - 1; j >= 0; j--) {
+            if (!slot[j]) {
+                sequence[j] = jobs[i].id;
+                slot[j] = true;
+                break;
+            }
+        }
+    }
+
+    // Print the job sequence
+    printf("Job Sequence: ");
+    for (int i = 0; i < maxDeadline; i++) {
+        if (slot[i]) {
+            printf("%d ", sequence[i]);
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    int numJobs = 5;
+
+    // Example jobs with their deadlines and profits
+    Job jobs[MAX_JOBS] = {
+        {1, 2, 100},
+        {2, 1, 50},
+        {3, 2, 10},
+        {4, 1, 60},
+        {5, 3, 20}
+    };
+
+    jobSequencing(jobs, numJobs);
+
+    return 0;
+}
+
